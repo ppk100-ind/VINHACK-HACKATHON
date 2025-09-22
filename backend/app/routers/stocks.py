@@ -5,6 +5,5 @@ router = APIRouter()
 
 @router.get("/price/{symbol}")
 async def get_price(symbol: str):
-    # fetch price (dummy or real)
     return get_stock_price(symbol)
 
