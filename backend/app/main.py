@@ -3,6 +3,10 @@ from fastapi.middleware.cors import CORSMiddleware
 from dotenv import load_dotenv
 import os
 
+
+gemini_key = os.getenv("GEMINI_API_KEY")
+
+
 load_dotenv()  # load all variables from .env file
 
 # Now os.getenv() will have access
