@@ -3,7 +3,7 @@ from fastapi.middleware.cors import CORSMiddleware
 
 app = FastAPI()
 
-# Allow React dev server (localhost:3000) CORS
+#CORS to be added
 app.add_middleware(
     CORSMiddleware,
     allow_origins=["*"],

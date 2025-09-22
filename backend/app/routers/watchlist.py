@@ -3,7 +3,6 @@ from app.services.firebase_service import verify_token
 
 router = APIRouter()
 
-# Placeholder: Put actual DB code here, currently stores in-memory
 user_watchlists = {}
 
 @router.get("/")
