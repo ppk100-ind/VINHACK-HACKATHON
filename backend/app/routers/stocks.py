@@ -4,6 +4,12 @@ import httpx
 API_KEY = os.getenv("ALPHA_VANTAGE_API_KEY")
 BASE_URL = "https://www.alphavantage.co/query"
 
+router = APIRouter()
+
+@router.get("/price/{symbol}")
+async def get_price(symbol: str):
+    return get_stock_price(symbol)
+
 async def get_stock_price(symbol):
     async with httpx.AsyncClient() as client:
         response = await client.get(

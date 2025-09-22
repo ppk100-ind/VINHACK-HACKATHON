@@ -10,7 +10,7 @@ print("Gemini API Key:", os.getenv('GEMINI_API_KEY'))
 
 app = FastAPI()
 
-# Allow React dev server (localhost:3000) CORS
+#CORS to be added
 app.add_middleware(
     CORSMiddleware,
     allow_origins=["*"],
