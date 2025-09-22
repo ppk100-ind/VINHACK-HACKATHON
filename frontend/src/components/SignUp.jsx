@@ -3,6 +3,7 @@ import { signUp } from '../firebase';
 
 const SignUp = ({ switchToSignIn }) => {
   const [formData, setFormData] = useState({
+    fullName: '',
     email: '',
     password: '',
     confirmPassword: ''
@@ -21,8 +22,16 @@ const SignUp = ({ switchToSignIn }) => {
   const handleSubmit = async (e) => {
     e.preventDefault();
     
+    if (!formData.fullName.trim()) {
+      return setError('Please enter your full name');
+    }
+    
     if (formData.password !== formData.confirmPassword) {
       return setError('Passwords do not match');
+    }
+
+    if (formData.password.length < 6) {
+      return setError('Password must be at least 6 characters long');
     }
 
     try {
@@ -30,71 +39,131 @@ const SignUp = ({ switchToSignIn }) => {
       setLoading(true);
       await signUp(formData.email, formData.password);
     } catch (error) {
-      setError(error.message);
+      console.error('Sign up error:', error);
+      let errorMessage = 'An error occurred during sign up.';
+      
+      switch (error.code) {
+        case 'auth/email-already-in-use':
+          errorMessage = (
+            <div>
+              An account with this email already exists. 
+              <button 
+                type="button" 
+                onClick={switchToSignIn}
+                style={{
+                  background: 'none',
+                  border: 'none',
+                  color: '#ff6b6b',
+                  textDecoration: 'underline',
+                  cursor: 'pointer',
+                  marginLeft: '5px'
+                }}
+              >
+                Sign in instead?
+              </button>
+            </div>
+          );
+          break;
+        case 'auth/invalid-email':
+          errorMessage = 'Please enter a valid email address.';
+          break;
+        case 'auth/operation-not-allowed':
+          errorMessage = 'Email/password accounts are not enabled. Please contact support.';
+          break;
+        case 'auth/weak-password':
+          errorMessage = 'Password is too weak. Please choose a stronger password.';
+          break;
+        default:
+          errorMessage = error.message || 'An unexpected error occurred.';
+      }
+      
+      setError(errorMessage);
     } finally {
       setLoading(false);
     }
   };
 
   return (
-    <div className="auth-container">
-      <div className="auth-form">
-        <h2>Sign Up</h2>
-        {error && <div className="error-message">{error}</div>}
-        <form onSubmit={handleSubmit}>
-          <div className="form-group">
-            <label htmlFor="email">Email:</label>
-            <input
-              type="email"
-              id="email"
-              name="email"
-              value={formData.email}
-              onChange={handleChange}
-              required
+    <div className="signin-container">
+      <div className="signin-form-container">
+        <div className="signin-form">
+          <h1 className="signin-title">SIGN UP</h1>
+          <p className="signin-subtitle">First Create an account</p>
+          
+          {error && <div className="error-message">{error}</div>}
+          
+          <form onSubmit={handleSubmit} className="signin-form-content">
+            <div className="input-group">
+              <input
+                type="text"
+                name="fullName"
+                placeholder="FULL NAME"
+                value={formData.fullName}
+                onChange={handleChange}
+                required
+                disabled={loading}
+                className="signin-input"
+              />
+            </div>
+            
+            <div className="input-group">
+              <input
+                type="email"
+                name="email"
+                placeholder="EMAIL"
+                value={formData.email}
+                onChange={handleChange}
+                required
+                disabled={loading}
+                className="signin-input"
+              />
+            </div>
+            
+            <div className="input-group">
+              <input
+                type="password"
+                name="password"
+                placeholder="Password"
+                value={formData.password}
+                onChange={handleChange}
+                required
+                minLength="6"
+                disabled={loading}
+                className="signin-input"
+              />
+            </div>
+            
+            <div className="input-group">
+              <input
+                type="password"
+                name="confirmPassword"
+                placeholder="Confirm your Password"
+                value={formData.confirmPassword}
+                onChange={handleChange}
+                required
+                minLength="6"
+                disabled={loading}
+                className="signin-input"
+              />
+            </div>
+            
+            <button type="submit" disabled={loading} className="signin-button">
+              {loading ? 'CREATING ACCOUNT...' : 'SIGN UP'}
+            </button>
+          </form>
+          
+          <div className="signin-footer">
+            <span className="signup-text">Already have an account?</span>
+            <button 
+              type="button" 
+              onClick={switchToSignIn}
+              className="signup-link"
               disabled={loading}
-            />
+            >
+              Sign In
+            </button>
           </div>
-          <div className="form-group">
-            <label htmlFor="password">Password:</label>
-            <input
-              type="password"
-              id="password"
-              name="password"
-              value={formData.password}
-              onChange={handleChange}
-              required
-              minLength="6"
-              disabled={loading}
-            />
-          </div>
-          <div className="form-group">
-            <label htmlFor="confirmPassword">Confirm Password:</label>
-            <input
-              type="password"
-              id="confirmPassword"
-              name="confirmPassword"
-              value={formData.confirmPassword}
-              onChange={handleChange}
-              required
-              minLength="6"
-              disabled={loading}
-            />
-          </div>
-          <button type="submit" disabled={loading} className="auth-button">
-            {loading ? 'Creating Account...' : 'Sign Up'}
-          </button>
-        </form>
-        <p className="auth-switch">
-          Already have an account? 
-          <button 
-            type="button" 
-            onClick={switchToSignIn}
-            className="switch-button"
-            disabled={loading}
-          >
-            Sign In
-          </button>
-        </p>
+        </div>
       </div>
     </div>
   );
