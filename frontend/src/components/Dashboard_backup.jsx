@@ -15,7 +15,7 @@ const Dashboard = () => {
   const [stockNews, setStockNews] = useState([]);
   const [loading, setLoading] = useState(true);
 
-  // Load all data on component mount and when search symbol changes
+  // API endpoint placeholders - Connect to backend here
   useEffect(() => {
     loadAllData();
   }, [searchSymbol]);
@@ -91,6 +91,26 @@ const Dashboard = () => {
 
   const fetchTrendRisk = async () => {
     try {
+      const data = await aiAPI.getAnalysis("AMZN");
+      setTrendRisk({
+        trend: data.trend || "Analysis Pending",
+        risk: data.risk_level || "Unknown",
+        recommendation: data.recommendation || "N/A",
+        confidence: data.confidence || 0
+      });
+    } catch (error) {
+      console.error('Error fetching trend/risk data:', error);
+      setTrendRisk({
+        trend: "Analysis Unavailable",
+        risk: "Unknown",
+        recommendation: "N/A",
+        confidence: 0
+      });
+    }
+  };
+
+  const fetchTrendRisk = async () => {
+    try {
       const data = await aiAPI.getAnalysis(searchSymbol);
       setTrendRisk({
         trend: data.trend || "Analysis Pending",
@@ -137,6 +157,7 @@ const Dashboard = () => {
   };
 
   const toggleAiAssistant = () => {
+    // TODO: Connect to AI assistant backend when implemented
     setShowAiAssistant(!showAiAssistant);
   };
 
@@ -171,10 +192,9 @@ const Dashboard = () => {
           <div className="search-container">
             <input 
               type="text" 
-              placeholder="Search stocks (e.g., AAPL, MSFT)" 
+              placeholder="Search" 
               className="search-input"
-              onKeyPress={handleSearch}
-              defaultValue={searchSymbol}
+              // TODO: Connect to stock search API
             />
           </div>
           
@@ -198,7 +218,7 @@ const Dashboard = () => {
           {/* Stock Overview Section */}
           <section className="stock-overview">
             <div className="overview-header">
-              <h2>Overview — {stockData?.symbol || searchSymbol}</h2>
+              <h2>Overview — {stockData?.symbol || 'AMZN'}</h2>
               <div className="stock-price">
                 {stockData ? (
                   <>
@@ -221,8 +241,9 @@ const Dashboard = () => {
               <div className="chart-placeholder">
                 <h3>Stock Price Chart</h3>
                 <div className="chart-area">
-                  <p>📊 Chart implementation pending - Backend endpoint available at /stocks/chart/{searchSymbol}</p>
-                  <p>Need to integrate with charting library (Chart.js, D3.js, etc.)</p>
+                  {/* TODO: Integrate with charting library (Chart.js, D3.js, etc.) */}
+                  {/* API endpoint: GET /api/stocks/chart/:symbol?period=1d */}
+                  <p>Chart will be rendered here from backend data</p>
                 </div>
               </div>
             </div>
@@ -269,7 +290,7 @@ const Dashboard = () => {
           <div className="bottom-section">
             {/* Trend & Risk */}
             <div className="trend-risk-container">
-              <h3>AI Analysis & Risk</h3>
+              <h3>Trend & Risk</h3>
               <div className="trend-risk-content">
                 {trendRisk ? (
                   <>
@@ -298,26 +319,13 @@ const Dashboard = () => {
               </div>
             </div>
 
-            {/* Stock News */}
-            <div className="stock-news-container">
-              <h3>Latest News for {searchSymbol}</h3>
-              <div className="news-content">
-                {stockNews.length > 0 ? (
-                  stockNews.slice(0, 5).map((article, index) => (
-                    <div key={index} className="news-item">
-                      <h4 className="news-title">{article.title}</h4>
-                      <p className="news-summary">{article.summary}</p>
-                      <div className="news-meta">
-                        <span className="news-source">{article.source}</span>
-                        <a href={article.url} target="_blank" rel="noopener noreferrer" className="news-link">
-                          Read more →
-                        </a>
-                      </div>
-                    </div>
-                  ))
-                ) : (
-                  <div className="loading-message">Loading news...</div>
-                )}
+            {/* Detailed Stats & Filters */}
+            <div className="detailed-stats-container">
+              <h3>Detailed stats & filters</h3>
+              <div className="stats-placeholder">
+                {/* TODO: Connect to backend API */}
+                {/* API endpoint: GET /api/stocks/detailed-stats/:symbol */}
+                <p>Detailed statistics table will be populated from backend</p>
               </div>
             </div>
           </div>
@@ -333,11 +341,11 @@ const Dashboard = () => {
         🤖
       </button>
 
-      {/* AI Assistant Modal/Panel */}
+      {/* AI Assistant Modal/Panel - Placeholder */}
       {showAiAssistant && (
         <div className="ai-assistant-panel">
           <div className="ai-panel-header">
-            <h3>AI Financial Assistant</h3>
+            <h3>AI Assistant</h3>
             <button 
               className="close-ai-btn"
               onClick={() => setShowAiAssistant(false)}
@@ -346,9 +354,9 @@ const Dashboard = () => {
             </button>
           </div>
           <div className="ai-panel-content">
-            <p>🤖 AI Chat functionality available via backend endpoint: /ai/chatbot</p>
-            <p>📈 Real-time AI analysis is integrated and working!</p>
-            <p>💡 Chat interface implementation pending - will connect to OpenAI API</p>
+            {/* TODO: AI Assistant UI will be designed and added later */}
+            <p>AI Assistant interface will be implemented here</p>
+            <p>Backend will handle the logic</p>
           </div>
         </div>
       )}
