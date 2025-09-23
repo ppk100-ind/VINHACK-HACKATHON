@@ -77,9 +77,17 @@ async def get_key_data(symbol: str):
 async def get_stock_news(symbol: str):
     """Get latest news for a stock"""
     try:
-        return news_services.get_latest_news(symbol)
+        return await news_services.get_latest_news(symbol)
     except Exception as e:
         raise HTTPException(status_code=500, detail=f"Error fetching news: {str(e)}")
+
+@router.get("/news")
+async def get_market_news():
+    """Get general market news"""
+    try:
+        return await news_services.get_market_news()
+    except Exception as e:
+        raise HTTPException(status_code=500, detail=f"Error fetching market news: {str(e)}")
 
 @router.get("/chart/{symbol}")
 async def get_stock_chart(symbol: str, period: str = "1d"):

@@ -87,10 +87,10 @@ export const aiAPI = {
 // News API endpoints
 export const newsAPI = {
   // Get general market news
-  getMarketNews: () => api.get('/news/market'),
+  getMarketNews: () => api.get('/stocks/news'),
   
   // Get news for specific stock
-  getStockNews: (symbol) => api.get(`/news/stock/${symbol}`),
+  getStockNews: (symbol) => api.get(`/stocks/news/${symbol}`),
 };
 
 export default api;
