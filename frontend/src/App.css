@@ -772,6 +772,134 @@ body {
   font-style: italic;
 }
 
+/* News Styles */
+.stock-news-container {
+  background: rgba(255, 255, 255, 0.1);
+  backdrop-filter: blur(10px);
+  border: 1px solid rgba(255, 255, 255, 0.2);
+  border-radius: 12px;
+  padding: 1.5rem;
+}
+
+.stock-news-container h3 {
+  color: #fff;
+  font-size: 1.1rem;
+  margin-bottom: 1.5rem;
+}
+
+.news-content {
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
+  max-height: 400px;
+  overflow-y: auto;
+}
+
+.news-item {
+  padding: 1rem;
+  background: rgba(255, 255, 255, 0.05);
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  border-radius: 8px;
+  transition: all 0.3s ease;
+}
+
+.news-item:hover {
+  background: rgba(255, 255, 255, 0.08);
+  border-color: rgba(255, 255, 255, 0.2);
+}
+
+.news-title {
+  color: #fff;
+  font-size: 0.95rem;
+  font-weight: 600;
+  margin-bottom: 0.5rem;
+  line-height: 1.4;
+}
+
+.news-summary {
+  color: #ccc;
+  font-size: 0.85rem;
+  line-height: 1.5;
+  margin-bottom: 0.75rem;
+  display: -webkit-box;
+  -webkit-line-clamp: 3;
+  -webkit-box-orient: vertical;
+  line-clamp: 3;
+  overflow: hidden;
+}
+
+.news-meta {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-top: 0.5rem;
+}
+
+.news-source {
+  color: #999;
+  font-size: 0.8rem;
+  font-weight: 500;
+}
+
+.news-link {
+  color: #4ade80;
+  text-decoration: none;
+  font-size: 0.8rem;
+  font-weight: 500;
+  transition: color 0.3s ease;
+}
+
+.news-link:hover {
+  color: #22c55e;
+  text-decoration: underline;
+}
+
+.loading-message {
+  color: #ccc;
+  font-style: italic;
+  text-align: center;
+  padding: 2rem;
+}
+
+/* AI Analysis styles */
+.recommendation-item {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 0.75rem 0;
+  border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+}
+
+.recommendation-label {
+  color: #ccc;
+  font-size: 0.9rem;
+}
+
+.recommendation-value {
+  color: #60a5fa;
+  font-weight: 500;
+  text-align: right;
+  max-width: 60%;
+  word-wrap: break-word;
+}
+
+.confidence-item {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 0.75rem 0;
+}
+
+.confidence-label {
+  color: #ccc;
+  font-size: 0.9rem;
+}
+
+.confidence-value {
+  color: #10b981;
+  font-weight: 500;
+}
+
 /* Responsive Design */
 @media (max-width: 768px) {
   .signin-form {

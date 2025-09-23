@@ -1,8 +1,7 @@
 import os
 import httpx
-from typing import Dict, Any
 
-NEWS_API_KEY = os.getenv("NEWS_API_KEY")
+NEWS_API_KEY = "5eeab9f9ef2c491291985034a03196e0"
 
 async def get_latest_news(symbol: str):
     try:
@@ -10,8 +9,8 @@ async def get_latest_news(symbol: str):
             return {
                 "news": [
                     {
-                        "title": f"News for {symbol} - API Key Required",
-                        "summary": "Configure NEWS_API_KEY to get real-time news",
+                        "title": f"Stock News for {symbol} - API Key Required",
+                        "summary": "Configure NEWS_API_KEY to get stock-related news",
                         "url": "#",
                         "source": "System"
                     }
@@ -20,7 +19,8 @@ async def get_latest_news(symbol: str):
 
         url = "https://newsapi.org/v2/everything"
         params = {
-            "q": symbol,
+            "q": f"{symbol} stock OR {symbol} shares OR {symbol} market",
+            "sources": "bloomberg,cnbc,the-wall-street-journal,business-insider",
             "apiKey": NEWS_API_KEY,
             "pageSize": 5,
             "sortBy": "publishedAt",
@@ -35,14 +35,15 @@ async def get_latest_news(symbol: str):
             return {"news": []}
 
         articles = data.get("articles", [])
-        news_list = []
-        for article in articles:
-            news_list.append({
-                "title": article.get("title"),
-                "summary": article.get("description"),
-                "url": article.get("url"),
-                "source": article.get("source", {}).get("name")
-            })
+        news_list = [
+            {
+                "title": a.get("title"),
+                "summary": a.get("description"),
+                "url": a.get("url"),
+                "source": a.get("source", {}).get("name")
+            }
+            for a in articles
+        ]
 
         return {"news": news_list}
     
@@ -50,7 +51,7 @@ async def get_latest_news(symbol: str):
         return {
             "news": [
                 {
-                    "title": f"Error fetching news for {symbol}",
+                    "title": f"Error fetching stock news for {symbol}",
                     "summary": str(e),
                     "url": "#",
                     "source": "System"
